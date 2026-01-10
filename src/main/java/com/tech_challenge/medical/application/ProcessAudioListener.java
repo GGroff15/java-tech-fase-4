@@ -1,6 +1,6 @@
 package com.tech_challenge.medical.application;
 
-import com.tech_challenge.medical.domain.AudioAnalysisCaseCreatedEvent;
+import com.tech_challenge.medical.domain.event.AudioAnalysisCaseCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

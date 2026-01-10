@@ -2,10 +2,12 @@ package com.tech_challenge.medical.domain;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class AnalysisCase {
 
     @Id
@@ -70,10 +72,6 @@ public class AnalysisCase {
 
     public Instant getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
     }
 
     public Instant getProcessedAt() {

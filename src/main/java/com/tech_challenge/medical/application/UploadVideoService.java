@@ -2,7 +2,7 @@ package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.AnalysisCase;
 import com.tech_challenge.medical.domain.Status;
-import com.tech_challenge.medical.domain.VideoAnalysisCaseCreatedEvent;
+import com.tech_challenge.medical.domain.event.VideoAnalysisCaseCreatedEvent;
 import com.tech_challenge.medical.domain.VideoUpload;
 import com.tech_challenge.medical.infraestructure.AnalysisCaseRepository;
 import com.tech_challenge.medical.infraestructure.FileStorage;

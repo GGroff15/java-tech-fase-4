@@ -1,4 +1,4 @@
-package com.tech_challenge.medical.domain;
+package com.tech_challenge.medical.domain.event;
 
 import org.springframework.context.ApplicationEvent;
 

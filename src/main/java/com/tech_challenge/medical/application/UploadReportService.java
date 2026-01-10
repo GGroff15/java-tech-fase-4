@@ -1,7 +1,7 @@
 package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.AnalysisCase;
-import com.tech_challenge.medical.domain.AnalysisCaseCreatedEvent;
+import com.tech_challenge.medical.domain.event.AnalysisCaseCreatedEvent;
 import com.tech_challenge.medical.domain.Status;
 import com.tech_challenge.medical.infraestructure.AnalysisCaseRepository;
 import com.tech_challenge.medical.infraestructure.FileStorage;

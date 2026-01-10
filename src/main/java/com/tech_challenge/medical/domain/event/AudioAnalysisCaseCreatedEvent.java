@@ -1,4 +1,4 @@
-package com.tech_challenge.medical.domain;
+package com.tech_challenge.medical.domain.event;
 
 import com.tech_challenge.medical.application.AudioUploadService;
 import org.springframework.context.ApplicationEvent;

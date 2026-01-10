@@ -1,7 +1,7 @@
 package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.AnalysisCase;
-import com.tech_challenge.medical.domain.AudioAnalysisCaseCreatedEvent;
+import com.tech_challenge.medical.domain.event.AudioAnalysisCaseCreatedEvent;
 import com.tech_challenge.medical.domain.AudioUpload;
 import com.tech_challenge.medical.domain.Status;
 import com.tech_challenge.medical.infraestructure.AnalysisCaseRepository;
