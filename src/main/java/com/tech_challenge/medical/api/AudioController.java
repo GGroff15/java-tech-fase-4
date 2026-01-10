@@ -1,7 +1,7 @@
 package com.tech_challenge.medical.api;
 
 import com.tech_challenge.medical.api.dto.AudioUploadRequest;
-import com.tech_challenge.medical.application.AudioUploadService;
+import com.tech_challenge.medical.application.UploadAudioService;
 import com.tech_challenge.medical.domain.AudioUpload;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -16,9 +16,9 @@ import java.io.IOException;
 @RequestMapping("/api/audios")
 class AudioController {
 
-    private final AudioUploadService service;
+    private final UploadAudioService service;
 
-    AudioController(AudioUploadService service) {
+    AudioController(UploadAudioService service) {
         this.service = service;
     }
 

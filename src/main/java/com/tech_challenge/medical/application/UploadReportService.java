@@ -1,6 +1,8 @@
 package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.AnalysisCase;
+import com.tech_challenge.medical.domain.TextUpload;
+import com.tech_challenge.medical.domain.Type;
 import com.tech_challenge.medical.domain.event.AnalysisCaseCreatedEvent;
 import com.tech_challenge.medical.domain.Status;
 import com.tech_challenge.medical.infraestructure.AnalysisCaseRepository;
@@ -29,7 +31,7 @@ public class UploadReportService {
         AnalysisCase newAnalysisCase = new AnalysisCase();
 
         newAnalysisCase.setPatientId(textUpload.patientId());
-        newAnalysisCase.setType("TEXT");
+        newAnalysisCase.setType(Type.REPORT);
         newAnalysisCase.setStatus(Status.PENDING);
         newAnalysisCase.setRawFilePath(rawFilePath);
         newAnalysisCase.setSource(textUpload.source());

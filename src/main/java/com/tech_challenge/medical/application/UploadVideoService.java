@@ -2,7 +2,8 @@ package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.AnalysisCase;
 import com.tech_challenge.medical.domain.Status;
-import com.tech_challenge.medical.domain.event.VideoAnalysisCaseCreatedEvent;
+import com.tech_challenge.medical.domain.Type;
+import com.tech_challenge.medical.domain.event.AnalysisCaseCreatedEvent;
 import com.tech_challenge.medical.domain.VideoUpload;
 import com.tech_challenge.medical.infraestructure.AnalysisCaseRepository;
 import com.tech_challenge.medical.infraestructure.FileStorage;
@@ -35,7 +36,7 @@ public class UploadVideoService {
 
         AnalysisCase newAnalysisCase = new AnalysisCase();
         newAnalysisCase.setPatientId(videoUpload.patientId());
-        newAnalysisCase.setType("VIDEO");
+        newAnalysisCase.setType(Type.VIDEO);
         newAnalysisCase.setStatus(Status.PENDING);
         newAnalysisCase.setRawFilePath(rawFilePath);
         newAnalysisCase.setSource(videoUpload.source());
@@ -45,6 +46,6 @@ public class UploadVideoService {
         LOGGER.info("Video AnalysisCase created with ID: {}", saved.getId());
 
         LOGGER.info("Sending VideoAnalysisCaseCreatedEvent for AnalysisCase ID: {}", saved.getId());
-        eventPublisher.publishEvent(new VideoAnalysisCaseCreatedEvent(this, saved.getId()));
+        eventPublisher.publishEvent(new AnalysisCaseCreatedEvent(this, saved.getId()));
     }
 }

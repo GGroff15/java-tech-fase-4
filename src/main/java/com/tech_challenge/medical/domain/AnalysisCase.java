@@ -16,7 +16,8 @@ public class AnalysisCase {
 
     private Long patientId;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -46,11 +47,11 @@ public class AnalysisCase {
         this.patientId = patientId;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

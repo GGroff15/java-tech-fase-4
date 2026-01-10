@@ -13,18 +13,18 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 @Component
-class ProcessReportListener {
+class AnalysisCaseProcessorListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessReportListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnalysisCaseProcessorListener.class);
 
     private final AnalysisCaseRepository analysisCaseRepository;
     private final AnalysisResultRepository analysisResultRepository;
-    private final TextExtractorStrategyResolver textExtractor;
+    private final ProcessorService service;
 
-    ProcessReportListener(AnalysisCaseRepository analysisCaseRepository, AnalysisResultRepository analysisResultRepository, TextExtractorStrategyResolver textExtractor) {
+    AnalysisCaseProcessorListener(AnalysisCaseRepository analysisCaseRepository, AnalysisResultRepository analysisResultRepository, ProcessorService service) {
         this.analysisCaseRepository = analysisCaseRepository;
         this.analysisResultRepository = analysisResultRepository;
-        this.textExtractor = textExtractor;
+        this.service = service;
     }
 
     @Async
@@ -41,22 +41,9 @@ class ProcessReportListener {
         analysisCase.setStatus(Status.PROCESSING);
         analysisCaseRepository.save(analysisCase);
 
-        String rawFilePath = analysisCase.getRawFilePath();
-
         try {
-            String fileText = textExtractor.extract(rawFilePath);
-
-            // Send text to AI model for analysis
-            System.out.println(fileText);
-
-            AnalysisResult analysisResult = new AnalysisResult();
-            analysisResult.setRiskLevel(RiskLevel.MEDIUM);
-            analysisResult.setFindings("");
-            analysisResult.setSummary("");
-            analysisResult.setAnalysisCaseId(analysisCase.getId());
-
+            AnalysisResult analysisResult = service.process(analysisCase);
             analysisResultRepository.save(analysisResult);
-
             analysisCase.setStatus(Status.COMPLETED);
         } catch (Exception e) {
             LOGGER.error("Error processing report for AnalysisCase ID: {}: {}", analysisCase.getId(), e.getMessage());

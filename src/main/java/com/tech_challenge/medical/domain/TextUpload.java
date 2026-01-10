@@ -1,4 +1,4 @@
-package com.tech_challenge.medical.application;
+package com.tech_challenge.medical.domain;
 
 import org.springframework.web.multipart.MultipartFile;
 

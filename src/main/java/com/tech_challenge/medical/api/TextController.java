@@ -1,7 +1,7 @@
 package com.tech_challenge.medical.api;
 
 import com.tech_challenge.medical.api.dto.TextUploadRequest;
-import com.tech_challenge.medical.application.TextUpload;
+import com.tech_challenge.medical.domain.TextUpload;
 import com.tech_challenge.medical.application.UploadReportService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;

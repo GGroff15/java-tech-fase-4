@@ -1,9 +1,10 @@
 package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.AnalysisCase;
-import com.tech_challenge.medical.domain.event.AudioAnalysisCaseCreatedEvent;
 import com.tech_challenge.medical.domain.AudioUpload;
 import com.tech_challenge.medical.domain.Status;
+import com.tech_challenge.medical.domain.Type;
+import com.tech_challenge.medical.domain.event.AnalysisCaseCreatedEvent;
 import com.tech_challenge.medical.infraestructure.AnalysisCaseRepository;
 import com.tech_challenge.medical.infraestructure.FileStorage;
 import org.slf4j.Logger;
@@ -14,15 +15,15 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class AudioUploadService {
+public class UploadAudioService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AudioUploadService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UploadAudioService.class);
 
     private final FileStorage storage;
     private final AnalysisCaseRepository repository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public AudioUploadService(FileStorage storage, AnalysisCaseRepository repository, ApplicationEventPublisher eventPublisher) {
+    public UploadAudioService(FileStorage storage, AnalysisCaseRepository repository, ApplicationEventPublisher eventPublisher) {
         this.storage = storage;
         this.repository = repository;
         this.eventPublisher = eventPublisher;
@@ -35,7 +36,7 @@ public class AudioUploadService {
 
         AnalysisCase newAnalysisCase = new AnalysisCase();
         newAnalysisCase.setPatientId(audioUpload.patientId());
-        newAnalysisCase.setType("AUDIO");
+        newAnalysisCase.setType(Type.AUDIO);
         newAnalysisCase.setStatus(Status.PENDING);
         newAnalysisCase.setRawFilePath(rawFilePath);
         newAnalysisCase.setSource(audioUpload.source());
@@ -45,7 +46,7 @@ public class AudioUploadService {
         LOGGER.info("Audio AnalysisCase created with ID: {}", saved.getId());
 
         LOGGER.info("Sending AudioAnalysisCaseCreatedEvent for AnalysisCase ID: {}", saved.getId());
-        eventPublisher.publishEvent(new AudioAnalysisCaseCreatedEvent(this, saved.getId()));
+        eventPublisher.publishEvent(new AnalysisCaseCreatedEvent(this, saved.getId()));
     }
 
 }
