@@ -1,5 +1,6 @@
 package com.tech_challenge.medical.infraestructure;
 
+import com.tech_challenge.medical.domain.Detection;
 import com.tech_challenge.medical.domain.FrameAnalysisResult;
 import com.tech_challenge.medical.infraestructure.dto.ProcessVideoRequest;
 import com.tech_challenge.medical.infraestructure.dto.ProcessVideoResponse;
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.LinkOption;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class VideoAnalyzer {
@@ -25,12 +30,33 @@ public class VideoAnalyzer {
         this.framesPerSecond = framesPerSecond;
     }
 
-    public FrameAnalysisResult analyze(File file) {
+    public List<FrameAnalysisResult> analyze(File file) {
         LOGGER.info("Analyzing video file {}", file.getAbsolutePath());
 
-        ProcessVideoRequest request = new ProcessVideoRequest(new FileSystemResource(file), framesPerSecond);
-        ProcessVideoResponse response = client.analyzeFrame(request);
-        return new FrameAnalysisResult(response.detections());
+        ProcessVideoRequest request =
+                new ProcessVideoRequest(
+                        new FileSystemResource(file),
+                        framesPerSecond
+                );
+
+        ProcessVideoResponse response =
+                client.analyzeFrame(request);
+
+        return response.detections()
+                .stream()
+                .map(this::toFrameAnalysisResult)
+                .toList();
     }
 
+    private FrameAnalysisResult toFrameAnalysisResult(Detection detection) {
+
+        Map<String, Double> signals = new HashMap<>();
+        signals.put(detection.label(), detection.confidence());
+
+        return new FrameAnalysisResult(
+                List.of(detection),
+                signals,
+                Map.of(),
+                Instant.now());
+    }
 }

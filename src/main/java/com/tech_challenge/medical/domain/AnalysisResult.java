@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -20,6 +21,7 @@ public class AnalysisResult {
     private RiskLevel riskLevel;
     @CreatedDate
     private LocalDateTime createdDate;
+    private List<Detection> detections;
 
     public LocalDateTime getCreatedDate() {
         return createdDate;
@@ -68,4 +70,7 @@ public class AnalysisResult {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public List<Detection> getDetections() {return detections;}
+    public void setDetections(List<Detection> detections) {this.detections = detections;}
 }
