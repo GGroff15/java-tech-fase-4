@@ -2,7 +2,6 @@ package com.tech_challenge.medical.domain.reference;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Aggregate containing evaluated vital signs compared against reference ranges.

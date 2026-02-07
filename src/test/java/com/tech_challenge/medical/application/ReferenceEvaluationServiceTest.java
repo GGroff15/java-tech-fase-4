@@ -1,7 +1,6 @@
 package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.form.*;
-import com.tech_challenge.medical.domain.reference.EvaluatedVitalSign;
 import com.tech_challenge.medical.domain.reference.EvaluatedVitalSigns;
 import com.tech_challenge.medical.domain.reference.RangeStatus;
 import com.tech_challenge.medical.infrastructure.config.VitalsReferenceProperties;

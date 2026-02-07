@@ -24,7 +24,8 @@ public class BufferService {
         BufferedEvents updatedEvents = buffer.events().addEmotion(event);
         store.save(buffer.updateEvents(updatedEvents));
         
-        log.debug("Appended emotion event to session: {}", correlationId.asString());
+        log.debug("Appended emotion event to session: {}", correlationId);
+        log.trace("Emotion event details: {}", event);
     }
 
     public void appendEvent(CorrelationId correlationId, TranscriptChunk chunk) {
@@ -32,7 +33,8 @@ public class BufferService {
         BufferedEvents updatedEvents = buffer.events().addTranscript(chunk);
         store.save(buffer.updateEvents(updatedEvents));
         
-        log.debug("Appended transcript chunk to session: {}", correlationId.asString());
+        log.debug("Appended transcript chunk to session: {}", correlationId);
+        log.trace("Transcript chunk details: {}", chunk);
     }
 
     public void appendEvent(CorrelationId correlationId, ObjectDetectionEvent detection) {
@@ -40,7 +42,8 @@ public class BufferService {
         BufferedEvents updatedEvents = buffer.events().addObject(detection);
         store.save(buffer.updateEvents(updatedEvents));
         
-        log.debug("Appended object detection to session: {}", correlationId.asString());
+        log.debug("Appended object detection to session: {}", correlationId);
+        log.trace("Object detection details: {}", detection);
     }
 
     public SessionBuffer findBuffer(CorrelationId correlationId) {

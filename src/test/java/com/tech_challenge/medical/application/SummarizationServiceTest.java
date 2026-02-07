@@ -2,7 +2,6 @@ package com.tech_challenge.medical.application;
 
 import com.tech_challenge.medical.domain.events.*;
 import com.tech_challenge.medical.domain.form.*;
-import com.tech_challenge.medical.domain.reference.EvaluatedVitalSigns;
 import com.tech_challenge.medical.domain.session.SessionBuffer;
 import com.tech_challenge.medical.domain.summary.*;
 import com.tech_challenge.medical.infrastructure.config.VitalsReferenceProperties;
@@ -96,7 +95,7 @@ class SummarizationServiceTest {
 
             // Then
             EmotionLabel dominant = summary.emotionSummary().dominantEmotion();
-            assertEquals(EmotionLabel.ANXIOUS, dominant);
+            assertEquals(EmotionLabel.ANGRY, dominant);
         }
 
         @Test
@@ -189,7 +188,7 @@ class SummarizationServiceTest {
         );
         
         BufferedEvents events = BufferedEvents.empty()
-                .addEmotion(createEmotionEvent(EmotionLabel.ANXIOUS))
+                .addEmotion(createEmotionEvent(EmotionLabel.ANGRY))
                 .addTranscript(createTranscriptChunk("chest pain"))
                 .addObject(createObjectDetection("wheelchair"));
         
@@ -202,8 +201,8 @@ class SummarizationServiceTest {
         );
         
         BufferedEvents events = BufferedEvents.empty()
-                .addEmotion(createEmotionEvent(EmotionLabel.ANXIOUS))
-                .addEmotion(createEmotionEvent(EmotionLabel.ANXIOUS))
+                .addEmotion(createEmotionEvent(EmotionLabel.ANGRY))
+                .addEmotion(createEmotionEvent(EmotionLabel.ANGRY))
                 .addEmotion(createEmotionEvent(EmotionLabel.SAD));
         
         return buffer.updateEvents(events);

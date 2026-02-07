@@ -6,7 +6,8 @@ import com.tech_challenge.medical.domain.session.CorrelationId;
 import com.tech_challenge.medical.domain.session.SessionBuffer;
 import com.tech_challenge.medical.domain.summary.ClinicalSummary;
 import com.tech_challenge.medical.domain.triage.*;
-import com.tech_challenge.medical.infrastructure.llm.OpenAiLlmClient;
+import com.tech_challenge.medical.infrastructure.llm.LlmClient;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class TriageServiceTest {
     SummarizationService summarizationService;
 
     @Mock
-    OpenAiLlmClient llmClient;
+    LlmClient llmClient;
 
     @Mock
     SessionService sessionService;

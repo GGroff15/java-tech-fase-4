@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -26,75 +26,38 @@ import com.tech_challenge.medical.domain.triage.RiskFactor;
 import com.tech_challenge.medical.domain.triage.RiskFactors;
 import com.tech_challenge.medical.domain.triage.TriageLevel;
 import com.tech_challenge.medical.domain.triage.TriageResult;
+import com.tech_challenge.medical.infrastructure.config.GeminiProperties;
 import com.tech_challenge.medical.infrastructure.config.TriageProperties;
 
-@Primary
+import jakarta.annotation.PostConstruct;
+
 @Component
+@Profile("!mock-llm")
 public class GeminiLlmClient implements LlmClient {
     private static final Logger log = LoggerFactory.getLogger(GeminiLlmClient.class);
 
     private final Client chatClient;
     private final TriageProperties properties;
     private final ObjectMapper objectMapper;
+    private final GenerateContentConfig config;
+    private final GeminiProperties geminiProperties;
 
-    private GenerateContentConfig config;
+    @PostConstruct
+    public void init() {
+        log.info("GeminiLlmClient initialized - using Gemini LLM client for analysis.");
+    }
 
-    public GeminiLlmClient(Client client, TriageProperties properties) {
-        Schema schema = Schema.fromJson("""
-                {
-                  "type": "object",
-                  "properties": {
-                    "triageLevel": {
-                      "type": "string"
-                    },
-                    "riskFactors": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "inconsistencies": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "notesForPhysician": {
-                      "type": "string"
-                    },
-                    "confidence": {
-                      "type": "number"
-                    }
-                  },
-                  "required": [
-                    "triageLevel",
-                    "riskFactors",
-                    "inconsistencies",
-                    "notesForPhysician",
-                    "confidence"
-                  ]
-                }""");
-        Content systemInstruction = Content.fromParts(Part.fromText(
-                """
-                        You are a medical triage assistant. Analyze the following clinical summary and provide a triage assessment.
+    public GeminiLlmClient(Client client, TriageProperties properties, GeminiProperties geminiProperties) {
+        this.geminiProperties = geminiProperties;
+        Schema outputSchema = Schema.fromJson(geminiProperties.outputSchema());
+        Content systemInstruction = Content.fromParts(Part.fromText(geminiProperties.systemPrompt()));
 
-                        IMPORTANT: You are assisting a trained medical professional. Do NOT make final medical decisions.
-
-                        Your role is to highlight risk factors, detect inconsistencies, and suggest triage priority.
-
-                        Consider:
-                              - Vital signs abnormalities
-                              - Emotional state patterns
-                              - Patient's verbal communication
-                              - Medical history relevance
-                              - Any contradictions between data sources
-                              - Compare if trancripted audio matches
-                """));
         config = GenerateContentConfig.builder()
                 .responseMimeType(MediaType.APPLICATION_JSON_VALUE)
                 .systemInstruction(systemInstruction)
-                .responseSchema(schema)
+                .responseSchema(outputSchema)
                 .build();
+
         this.chatClient = client;
         this.properties = properties;
         this.objectMapper = new ObjectMapper();
@@ -131,7 +94,7 @@ public class GeminiLlmClient implements LlmClient {
 
     private String callLlm(String prompt) {
         try {
-            GenerateContentResponse response = chatClient.models.generateContent("gemini-2.5-flash", prompt, config);
+            GenerateContentResponse response = chatClient.models.generateContent(geminiProperties.model(), prompt, config);
             return response.text();
         } catch (Exception ex) {
             throw new LlmProcessingException("LLM API call failed", ex);
